@@ -1,16 +1,14 @@
-# 🗳️ Live Poll — Soroban Testnet (Stellar Level 2)
+# Live Poll ✦ Stellar Soroban Smart Polling Portal
 
-**Live Poll** is a real-time, one-question decentralized polling application built on the **Stellar Soroban Smart Contract Platform**. It provides a seamless interface that connects multiple browser extension wallets, tracks contract state through transaction simulation, and streams ledger event logs in real-time.
-
-> Built for the Stellar Dev Onboarding Program — Level 2 (Green Belt) submission.
+**Live Poll** is a premium, real-time decentralized polling application built on the **Stellar Soroban Smart Contract Platform**. It provides a sleek, glassmorphic dark-theme interface that connects multiple browser extension wallets, tracks contract state through transaction simulation, and streams ledger event logs in real-time.
 
 ---
 
 ## 🚀 Verifiable Testnet Deployment
 
-The smart contract is compiled, deployed, and initialized on the **Stellar Testnet**:
+The smart contract is compiled, deployed, initialized, and seeded on the **Stellar Testnet**:
 
-*   **Live Portal Link:** `<ADD YOUR VERCEL/NETLIFY URL HERE>`
+*   **Live Portal Link:** [https://live-poll-soroban-testnet-stellar-l.vercel.app/](https://live-poll-soroban-testnet-stellar-l.vercel.app/)
 *   **Smart Contract Address:** `CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK`
     *   *Verify on Stellar.expert:* [Stellar Explorer Contract Link](https://stellar.expert/explorer/testnet/contract/CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK)
 *   **WASM Upload Transaction Hash:** `3b926f4266743d7bfd7f8e24abdd81f2c206faf5f29f64d871cf32739961a676`
@@ -41,6 +39,23 @@ The contract is deployed with the default question and options:
 ### 3. Real-Time Interactions
 *   **Event Polling:** UI polls Soroban RPC `getEvents` for the contract's `voted` topic, re-syncing vote counts and live activity feed without a centralized backend.
 *   **Simulated Reads:** Queries like `get_question` and `has_voted` use `simulateTransaction` for fast, signature-free reads.
+
+---
+
+## 📸 Screenshots
+
+### Product Demo
+![Product Demo](./images/product%20demo.png)
+
+### Wallet Options
+![Wallet Options](./images/wallet%20options.png)
+
+---
+
+## 🧾 Sample Voting Transaction
+
+*   **Tx Hash:** `cfa41be30aa49f272b79435d59efc1de14f8691baebc6a5e92d1e4ef7dc6a49c`
+*   **View on Stellar Expert:** [View Transaction](https://stellar.expert/explorer/testnet/tx/cfa41be30aa49f272b79435d59efc1de14f8691baebc6a5e92d1e4ef7dc6a49c)
 
 ---
 
@@ -96,12 +111,6 @@ Visit `http://localhost:5173`.
 npm run build
 # deploy the `dist/` folder to Vercel/Netlify, with VITE_CONTRACT_ID set as an env var
 ```
-
----
-
-## 📸 Screenshot: wallet options
-
-`<ADD SCREENSHOT OF THE STELLARWALLETSKIT MODAL HERE>`
 
 ---
 
