@@ -45,10 +45,10 @@ The contract is deployed with the default question and options:
 ## 📸 Screenshots
 
 ### Product Demo
-![Product Demo](./images/product%20demo.png)
+![Product Demo](./images/product-demo.png)
 
 ### Wallet Options
-![Wallet Options](./images/wallet%20options.png)
+![Wallet Options](./images/wallet-options.png)
 
 ---
 
@@ -57,4 +57,32 @@ The contract is deployed with the default question and options:
 *   **Tx Hash:** `cfa41be30aa49f272b79435d59efc1de14f8691baebc6a5e92d1e4ef7dc6a49c`
 *   **View on Stellar Expert:** [View Transaction](https://stellar.expert/explorer/testnet/tx/cfa41be30aa49f272b79435d59efc1de14f8691baebc6a5e92d1e4ef7dc6a49c)
 
+---
 
+## 🚀 Setup instructions
+
+### Prerequisites
+- Node.js 18+
+- Rust + `wasm32-unknown-unknown` target
+- Soroban CLI: `cargo install --locked soroban-cli`
+- Stellar wallet browser extension (e.g. Freighter, xBull) set to **Testnet**
+
+### 1. Clone and install
+```bash
+git clone https://github.com/khushisingh009/Live-Poll-Soroban-Testnet-Stellar-Level-2-.git
+cd stellar-live-poll
+cd frontend && npm install
+```
+
+### 2. Configure the frontend
+```bash
+cd frontend
+cp .env.example .env
+# Set VITE_CONTRACT_ID=CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK
+```
+
+### 3. Run locally
+```bash
+npm run dev
+```
+Visit `http://localhost:5173`.
