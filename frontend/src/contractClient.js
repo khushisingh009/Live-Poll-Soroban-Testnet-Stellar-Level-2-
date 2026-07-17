@@ -1,6 +1,6 @@
 import {
   Contract,
-  SorobanRpc,
+  rpc,
   TransactionBuilder,
   Networks,
   BASE_FEE,
@@ -12,7 +12,7 @@ import { CONTRACT_ID, NETWORK_PASSPHRASE, RPC_URL } from './config';
 import { signTransactionXDR } from './wallet';
 import { classifyError } from './errors';
 
-const server = new SorobanRpc.Server(RPC_URL, { allowHttp: false });
+const server = new rpc.Server(RPC_URL, { allowHttp: false });
 
 async function buildAndSubmit(method, args, sourceAddress) {
   try {
@@ -90,7 +90,7 @@ async function simulateRead(method, args = [], sourceAddress) {
     .build();
 
   const sim = await server.simulateTransaction(tx);
-  if (SorobanRpc.Api.isSimulationError(sim)) {
+  if (rpc.Api.isSimulationError(sim)) {
     throw classifyError(new Error(sim.error));
   }
   return scValToNative(sim.result.retval);

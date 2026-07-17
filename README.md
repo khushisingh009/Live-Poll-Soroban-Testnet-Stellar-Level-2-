@@ -1,21 +1,46 @@
 # 🗳️ Live Poll — Soroban Testnet (Stellar Level 2)
 
-A real-time, one-question polling dApp built on **Soroban** (Stellar smart contracts). Users connect any supported Stellar wallet, vote once, and watch results update live as other votes stream in via on-chain events.
+**Live Poll** is a real-time, one-question decentralized polling application built on the **Stellar Soroban Smart Contract Platform**. It provides a seamless interface that connects multiple browser extension wallets, tracks contract state through transaction simulation, and streams ledger event logs in real-time.
 
 > Built for the Stellar Dev Onboarding Program — Level 2 (Green Belt) submission.
 
 ---
 
-## ✨ What this project demonstrates
+## 🚀 Verifiable Testnet Deployment
 
-| Requirement | Where it lives |
-|---|---|
-| **Multi-wallet integration** | `frontend/src/wallet.js` — [StellarWalletsKit](https://github.com/Creit-Tech/Stellar-Wallets-Kit) with `allowAllModules()`, supporting Freighter, Albedo, xBull, Lobstr, Hana, Rabet, WalletConnect, Ledger |
-| **3+ error types handled** | `frontend/src/errors.js` — wallet not found, user rejected, insufficient balance, already voted, network error |
-| **Contract deployed on testnet** | `contract/src/lib.rs` — see [Deployed Contract](#-deployed-contract) below |
-| **Contract called from frontend** | `frontend/src/contractClient.js` — `vote()` write call, `get_question/get_options/get_votes/has_voted` read calls |
-| **Transaction status visible** | UI shows `pending → success/fail` with link to Stellar Expert |
-| **Real-time event sync** | `pollVoteEvents()` polls Soroban RPC `getEvents` for the contract's `voted` topic and re-syncs vote counts + activity feed |
+The smart contract is compiled, deployed, and initialized on the **Stellar Testnet**:
+
+*   **Live Portal Link:** `<ADD YOUR VERCEL/NETLIFY URL HERE>`
+*   **Smart Contract Address:** `CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK`
+    *   *Verify on Stellar.expert:* [Stellar Explorer Contract Link](https://stellar.expert/explorer/testnet/contract/CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK)
+*   **WASM Upload Transaction Hash:** `3b926f4266743d7bfd7f8e24abdd81f2c206faf5f29f64d871cf32739961a676`
+    *   *Verify on Stellar.expert:* [WASM Upload Tx Details](https://stellar.expert/explorer/testnet/tx/3b926f4266743d7bfd7f8e24abdd81f2c206faf5f29f64d871cf32739961a676)
+*   **Contract Instantiation Transaction Hash:** `cb2928bb059de7de476efe2e0d8ef50653ea9c75be7ff2de5559c44085fc2494`
+    *   *Verify on Stellar.expert:* [Instantiation Tx Details](https://stellar.expert/explorer/testnet/tx/cb2928bb059de7de476efe2e0d8ef50653ea9c75be7ff2de5559c44085fc2494)
+*   **Contract Initialization (`initialize`) Transaction Hash:** `f15bf0cc6fad656d1f6af58524ce58d5411b3d9b1750a97baba6e33b112c4059`
+    *   *Verify on Stellar.expert:* [Initialization Tx Details](https://stellar.expert/explorer/testnet/tx/f15bf0cc6fad656d1f6af58524ce58d5411b3d9b1750a97baba6e33b112c4059)
+
+### Default Initialized State
+The contract is deployed with the default question and options:
+*   **Question:** "Which Stellar wallet do you use most?"
+*   **Options:** Freighter, Albedo, xBull, Lobstr
+
+---
+
+## 🛡️ Core Features & Level 2 Requirements Met
+
+### 1. Multi-Wallet Integration
+*   **Stellar Wallets Kit:** Implements `allowAllModules()` supporting Freighter, Albedo, xBull, Lobstr, Hana, Rabet, WalletConnect, and Ledger.
+
+### 2. Comprehensive Error Handling (3+ types handled)
+*   **Wallet Not Found:** Detects when no compatible extension/app is available.
+*   **User Rejected:** Handles scenarios where the wallet's confirm/sign dialog is declined.
+*   **Insufficient Balance:** Detects underfunded accounts for transaction fees.
+*   **Contract Level Rejection:** Prevents duplicate voting via smart contract persistent storage `HasVoted(Address)`.
+
+### 3. Real-Time Interactions
+*   **Event Polling:** UI polls Soroban RPC `getEvents` for the contract's `voted` topic, re-syncing vote counts and live activity feed without a centralized backend.
+*   **Simulated Reads:** Queries like `get_question` and `has_voted` use `simulateTransaction` for fast, signature-free reads.
 
 ---
 
@@ -36,27 +61,6 @@ stellar-live-poll/
 └── scripts/deploy.sh       # Build + deploy + initialize helper script
 ```
 
-### How voting works
-1. User connects a wallet via the StellarWalletsKit modal.
-2. Frontend reads `get_question`, `get_options`, `get_votes`, `has_voted` via `simulateTransaction` (free, no signature).
-3. On vote: frontend builds a `vote(voter, option_index)` invocation, calls `prepareTransaction`, asks the wallet to sign the XDR, then submits via `sendTransaction`.
-4. UI polls `getTransaction` until status resolves to `SUCCESS` or fails — shown live as **pending → success/fail**.
-5. The contract emits a `voted` event on every successful vote. The frontend polls `getEvents` every few seconds, and on a new event it re-fetches vote counts and appends an entry to the **Live Activity Feed** — this is what keeps all connected clients in sync without a backend.
-
----
-
-## 🔒 Error handling (3+ types)
-
-Implemented in `errors.js` / `classifyError()`:
-
-1. **Wallet not found** — no compatible extension/app detected when opening the connect modal.
-2. **User rejected** — the wallet's confirm/sign dialog was declined.
-3. **Insufficient balance** — account underfunded to cover the transaction fee.
-4. **Already voted** *(contract-level)* — the connected address already has a recorded vote.
-5. **Network/RPC error** — testnet RPC unreachable or timed out.
-
-Each is surfaced as a plain-language message in the UI's error banner rather than a raw stack trace.
-
 ---
 
 ## 🚀 Setup instructions
@@ -74,52 +78,26 @@ cd stellar-live-poll
 cd frontend && npm install
 ```
 
-### 2. Deploy the contract
+### 2. Configure the frontend
 ```bash
-cd ../scripts
-./deploy.sh
-```
-This will:
-- Generate/fund a testnet identity via Friendbot
-- Build the contract to WASM
-- Deploy it to testnet
-- Initialize it with a default question + options
-- Print the deployed **Contract ID**
-
-### 3. Configure the frontend
-```bash
-cd ../frontend
+cd frontend
 cp .env.example .env
-# paste the Contract ID printed above into VITE_CONTRACT_ID
+# Set VITE_CONTRACT_ID=CAA6JWF24DJ2PELRBIIC5FN2UBZ37CYVSOVUEJBBDGSSCBUROC7EA5IK
 ```
 
-### 4. Run locally
+### 3. Run locally
 ```bash
 npm run dev
 ```
 Visit `http://localhost:5173`.
 
-### 5. Build for production / deploy
+### 4. Build for production / deploy
 ```bash
 npm run build
 # deploy the `dist/` folder to Vercel/Netlify, with VITE_CONTRACT_ID set as an env var
 ```
 
 ---
-
-## 🌐 Live demo
-
-- **Live demo link:** `<ADD YOUR VERCEL/NETLIFY URL HERE>`
-
-## 📦 Deployed contract
-
-- **Contract ID (Testnet):** `<ADD DEPLOYED CONTRACT ID HERE>`
-- **View on Stellar Expert:** `https://stellar.expert/explorer/testnet/contract/<CONTRACT_ID>`
-
-## 🧾 Sample transaction
-
-- **Tx hash of a `vote` call:** `<ADD TX HASH HERE>`
-- **View on Stellar Expert:** `https://stellar.expert/explorer/testnet/tx/<TX_HASH>`
 
 ## 📸 Screenshot: wallet options
 
